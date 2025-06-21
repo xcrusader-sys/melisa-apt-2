@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Melisa Modern Apt 2 – Print-ready Welcome Cards</title>
+
+  <!-- Urbanist variable font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ──────────────────────────────
+       Modern 2025 CSS Architecture
+       ────────────────────────────── */
+    @layer reset, base, layout, components, utilities, print;
+
+    /* === 1. Reset === */
+    @layer reset {
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+      html{block-size:100%;}
+    }
+
+    /* === 2. Design tokens & base === */
+    @layer base {
+      :root{
+        /* Vlore-sea palette */
+        --c-glacial:#bdf0ff;  /* light aqua */
+        --c-aqua:#2ed8ff;     /* shallow water */
+        --c-teal:#0ea5a0;     /* midday teal */
+        --c-midnight:#004e75; /* deep evening */
+        --c-coral:#ff8a69;    /* sunset accent 1 */
+        --c-sand:#ffd682;     /* sunset accent 2 */
+
+        /* Gradients */
+        --g-morning:linear-gradient(145deg,var(--c-aqua),var(--c-glacial));
+        --g-sunset:linear-gradient(145deg,var(--c-coral),var(--c-sand));
+        --g-deep:linear-gradient(145deg,var(--c-midnight),var(--c-teal));
+
+        /* Misc */
+        --radius-3xl:2rem;
+        --shadow-xl:0 12px 28px hsl(212 80% 6%/.26);
+
+        /* SVG-noise overlay */
+        --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+      }
+
+      body{
+        font-family:"Urbanist",system-ui,sans-serif;
+        background:var(--g-morning);
+        min-block-size:100%;
+        display:grid;place-items:center;
+        padding:clamp(1.5rem,3vw,3rem);
+        color:#fff;
+        -webkit-font-smoothing:antialiased;
+      }
+    }
+
+    /* === 3. Layout (container queries) === */
+    @layer layout {
+      main{
+        display:grid;
+        gap:clamp(1.25rem,2.5vw,2.5rem);
+        inline-size:100%;
+        max-inline-size:1000px;
+        container-type:inline-size;
+      }
+      @container (min-width:700px){
+        main{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));}
+      }
+    }
+
+    /* === 4. Component styles === */
+    @layer components {
+      .card{
+        position:relative;overflow:hidden;
+        border-radius:var(--radius-3xl);
+        padding:clamp(2rem,4.5vw,3.25rem);
+        background:var(--_bg,linear-gradient(145deg,var(--c-glacial),var(--c-aqua)));
+        text-align:center;color:#fff;box-shadow:var(--shadow-xl);
+        transition:transform .45s ease,box-shadow .45s ease;
+      }
+
+      /* noise overlay */
+      .card::before{
+        content:"";position:absolute;inset:0;
+        background:var(--noise);mix-blend-mode:overlay;
+        pointer-events:none;
+      }
+
+      .card:nth-of-type(2){--_bg:var(--g-sunset);}
+      .card:nth-of-type(3){--_bg:var(--g-deep);}
+
+      .card h1{font-size:clamp(1.9rem,5vw,2.9rem);font-weight:800;margin-block-end:1rem;}
+      .card p {font-size:clamp(1rem,2.1vw,1.2rem);line-height:1.55;max-inline-size:60ch;margin:0 auto 1.75rem;}
+
+      .card img{inline-size:min(62%,240px);aspect-ratio:1/1;border-radius:1.25rem;}
+
+      /* hover flourish */
+      .card:has(a:hover){transform:scale(1.03);}
+
+      /* Tooltip */
+      a.qr-link{position:relative;display:inline-flex;justify-content:center;}
+      a.qr-link::after{
+        content:"Tap to open";
+        position:absolute;inset-block-start:100%;inset-inline-start:50%;
+        translate:-50% 0;font-size:0.875rem;opacity:0;
+        transition:opacity .3s ease .15s;
+      }
+      a.qr-link:hover::after,a.qr-link:focus-visible::after{opacity:1;}
+    }
+
+    /* === 5. Utilities === */
+    @layer utilities {.card{break-inside:avoid;}}
+
+    /* === 6. Print === */
+    @layer print {
+      @media print {
+        @page{size:A4 portrait;margin:0}
+        html,body,.card{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+        body{padding:0}
+        main{grid-template-columns:1fr;gap:1.5rem;}
+
+        .card{
+          width:100vw;height:100vh;border-radius:0;box-shadow:none;
+          padding:0 2.5cm;color:#000;background:#fff;
+          display:flex;flex-direction:column;justify-content:center;align-items:center;
+        }
+        .card::before,a.qr-link::after{display:none;}
+        .card h1,.card p{max-width:14cm;text-align:center;color:#000;}
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- 1 ▸ Digital Guidebook -->
+    <section class="card">
+      <h1>Unlock Vlore Like a Local</h1>
+      <p>Point your camera at the code and dive into our insider guide—<strong>hidden coves, foodie hotspots, day-trip gems</strong> and everything you need for an unforgettable seaside stay.</p>
+      <a class="qr-link" href="https://www.airbnb.co.uk/s/guidebooks?refinement_paths%5B%5D=%2Fguidebooks%2F5846173&amp;unique_share_id=c19af30e-1836-4826-b17a-9c0eea0740a3" aria-label="Open digital guidebook">
+        <img src="guidebook-qr.png" alt="Digital guidebook QR – Apt 2">
+      </a>
+    </section>
+
+    <!-- 2 ▸ Review / Feedback -->
+    <section class="card">
+      <h1>Loved Your Stay? Tell the World!</h1>
+      <p>Your <strong>60-second</strong> review keeps us shining and helps fellow travellers book with confidence. Tap the code, share the love &amp; score instant good karma.</p>
+      <a class="qr-link" href="https://www.airbnb.co.uk/rooms/933975638176214625" aria-label="Leave a review for Melisa Modern Apt 2">
+        <img src="apt2_listing_qr_softcoral.png" alt="Review QR – Apt 2">
+      </a>
+    </section>
+
+    <!-- 3 ▸ Direct Listing -->
+    <section class="card">
+      <h1>Your Next Getaway, One Scan Away</h1>
+      <p>Check live dates, rates, and book Melisa Modern Apt 2 in seconds. Secure your front-row seat to Vlore’s sparkling coast—scan &amp; reserve.</p>
+      <a class="qr-link" href="https://www.airbnb.co.uk/rooms/933975638176214625" aria-label="View Airbnb listing – Apt 2">
+        <img src="apt2_listing_qr_coral.png" alt="Listing QR – Apt 2">
+      </a>
+    </section>
+  </main>
+</body>
+</html>
